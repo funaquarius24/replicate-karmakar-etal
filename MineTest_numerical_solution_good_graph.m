@@ -65,5 +65,5 @@ u_0_of_y
 term3 = ((2 * M * U + 1) * ls) / ( 2 * M * (ls + 1));
 
 
-u = term1 + term2 + term3;
+% u = term1 + term2 + term3;
 
