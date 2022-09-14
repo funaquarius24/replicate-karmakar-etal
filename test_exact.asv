@@ -1,0 +1,57 @@
+close all;
+clear all;
+
+H = 1;
+L = 1;
+U = 1;
+
+
+
+Da = 0.01; % Darcy number
+Ar = H/L; % Aspect ratio
+ls = 0.1; % Non dimensional slip length
+M = 1;   % Viscosity ratio 
+K = 0.5;    % Permeability ratio
+F = 10;   % Non-dimensional inertial coeffcient
+phi = 0;
+
+small_e = 1 / sqrt(Da);
+
+
+a = sin(phi).^2 + K*cos(phi).^2;
+b = sin(phi).^2 + sqrt(K)*cos(phi).^2;
+c = (K-1)*sin(phi)*cos(phi);
+d = sqrt((K-1))*sin(phi)*cos(phi);
+
+% Declare symbolic variable
+syms u(x); % the state variable
+syms f(x); % function in DE
+syms As(i0,j0); % The Matrix A
+syms bs(i0); % Matrix b
+syms psi(x,i0); % basis functions
+syms psidd(x,i0); % second derivative of basis functions
+syms x
+ assume(i0,'real')
+assume(j0,'real')
+assume(i0>0)
+assume(j0>0)
+
+% Define the function
+f(x) = 0;
+
+
+% Define the ODE
+ode = M*diff(u,x,2) -small_e^2*a*u - F*b*small_e*u + 1 == -f;
+
+% Boundary Conditions
+L=4; % Length of the domain
+cond1 = u(0) == 0;
+cond2 = u(L) == 0;
+conds = [cond1 cond2];
+uSol = dsolve(ode,conds);
+uSol = simplify(uSol);
+
+% Convert the symbolic function to numerical function
+uSol = matlabFunction(uSol)
+
+

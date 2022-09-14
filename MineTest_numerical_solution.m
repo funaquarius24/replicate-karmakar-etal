@@ -8,9 +8,9 @@ Da = 0.01; % Darcy number
 Ar = H/L; % Aspect ratio
 ls = 0.1; % Non dimensional slip length
 M = 1;   % Viscosity ratio 
-K = 1;    % Permeability ratio
+K = 0.5;    % Permeability ratio
 F = 10;   % Non-dimensional inertial coeffcient
-phi = pi / 5;
+phi = 0;
 
 small_e = 1 / sqrt(Da);
 
@@ -43,7 +43,7 @@ D2 = D2_numerator / D2_denominator;
 u_0_of_y = D1.*cosh(term0) + D2.*sinh(term0) + 1./(a*small_e^2);
 u_of_y = u_0_of_y;
 
-for i=1:10
+for i=1:4
     P = F*b*small_e*u_of_y;
     
     term1 = sqrt((a*small_e^2 + P) / M) .* y;
@@ -73,11 +73,12 @@ for i=1:10
     
     C2 = C2_numerator ./ C2_denominator;
     
-    
-    
-    
-    
+    u_prev = u_of_y;
     u_of_y = C1.*cosh(term1) + C2.*sinh(term1) + 1./(a*small_e^2 + P);
 end
 
-u_of_y
+plot(u_of_y, y, '-r')
+xlabel('u')
+ylabel('y')
+
+u_te = u_of_y - u_0_of_y;
